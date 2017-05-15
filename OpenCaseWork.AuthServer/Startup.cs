@@ -8,6 +8,7 @@ using OpenCaseWork.AuthServer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using IdentityServer4.Services;
 
 namespace OpenCaseWork.AuthServer
 {
@@ -31,7 +32,9 @@ namespace OpenCaseWork.AuthServer
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {         
+        {
+            services.AddTransient<IProfileService, CustomProfileService>();
+
             // configure identity server with in-memory stores, keys, clients and scopes
             if (Environment.IsDevelopment())
             {
@@ -39,13 +42,18 @@ namespace OpenCaseWork.AuthServer
                 .AddTemporarySigningCredential()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryPersistedGrants()
-                .AddInMemoryApiResources(Config.GetApiResources())
+                //.AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<ApplicationUser>(); // IdentityServer4.AspNetIdentity.;
 
                 // Identity & SQLite.
+                //services.AddDbContext<ApplicationDbContext>(options =>
+                //    options.UseSqlite(("Filename=MyDatabase.db")));
+
+                // Identity & Sql Server.
+                var connection = Configuration.GetConnectionString("DevConnection");
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(("Filename=MyDatabase.db"))); 
+                    options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
             }
             else
             {
@@ -53,11 +61,12 @@ namespace OpenCaseWork.AuthServer
                 .AddTemporarySigningCredential()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryPersistedGrants()
-                .AddInMemoryApiResources(Config.GetApiResources())
+               // .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())                
                 .AddAspNetIdentity<ApplicationUser>(); // IdentityServer4.AspNetIdentity.
 
                 // Identity & Sql Server.
+                var connection = Configuration.GetConnectionString("ProdConnection");
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             }

@@ -12,7 +12,7 @@ namespace OpenCaseWork.AuthServer
     public class Config
     {
         // scopes define the API resources in your system
-        public static IEnumerable<ApiResource> GetApiResources()
+        /*public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {
@@ -21,7 +21,7 @@ namespace OpenCaseWork.AuthServer
                     UserClaims = { "role"}
                 }
             };
-        }
+        }*/
 
         // Identity resources (used by UserInfo endpoint).
         public static IEnumerable<IdentityResource> GetIdentityResources()
@@ -53,31 +53,14 @@ namespace OpenCaseWork.AuthServer
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId, // For UserInfo endpoint.
                         IdentityServerConstants.StandardScopes.Profile,
-                        "WebAPI",
+                        //"WebAPI",
                         "roles"
                     },
                 }
             };
         }
+        
 
-        public static List<TestUser> GetUsers()
-        {
-            return new List<TestUser>
-            {
-                new TestUser
-                {
-                    SubjectId = "1",
-                    Username = "alice",
-                    Password = "password"
-                },
-                new TestUser
-                {
-                    SubjectId = "2",
-                    Username = "bob",
-                    Password = "password"
-                }
-            };
-        }
     }
 
 

@@ -26,12 +26,14 @@ namespace OpenCaseWork.AuthServer.Data
 
             // Look for any students.
             if (context.Users.Any())
-            {
+            {                
                 return;   // DB has been seeded
             }
 
-            ApplicationUser user = new ApplicationUser { FirstName = "Joe", LastName = "Blow", LocationId = 1, UserName = "jblow" };
+            ApplicationUser user = new ApplicationUser { FirstName = "Joe", LastName = "Blow", LocationId = 1, UserName = "jblow" };            
             await _userManager.CreateAsync(user, "1!Password");
+
+            IdentityRole role = new IdentityRole("administrator");
 
         }
         
